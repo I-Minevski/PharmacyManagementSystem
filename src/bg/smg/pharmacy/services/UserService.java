@@ -21,13 +21,10 @@ public class UserService implements UserServiceI {
             try (PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO users (username, password, created, is_active) VALUES (?, ?, ?, ?)")) {
 
-                // Set parameters for the prepared statement
                 statement.setString(1, user.getUsername());
-                statement.setString(2, encode(user.getPassword())); // Hash the password
-                statement.setTimestamp(3, new Timestamp(System.currentTimeMillis())); // Set current timestamp
-                statement.setBoolean(4, true); // Default to active status
-
-                // Execute the SQL statement to insert the user
+                statement.setString(2, encode(user.getPassword()));
+                statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+                statement.setBoolean(4, true);
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {
@@ -51,11 +48,8 @@ public class UserService implements UserServiceI {
             try (PreparedStatement statement = connection.prepareStatement(
                     "UPDATE users SET password=? WHERE username=?")) {
 
-                // Set parameters for the prepared statement
                 statement.setString(1, encode(user.getPassword()));
                 statement.setString(2, user.getUsername());
-
-                // Execute the SQL statement to update the user password
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {

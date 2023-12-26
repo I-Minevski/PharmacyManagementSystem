@@ -31,7 +31,7 @@ public class RegistrationWindow extends JFrame {
         registrationPanel.add(passwordField);
         registrationPanel.add(new JLabel("Repeat Password:"));
         registrationPanel.add(repeatPasswordField);
-        registrationPanel.add(new JPanel()); // Empty panel for spacing
+        registrationPanel.add(new JPanel());
 
         JButton registerUserButton = new JButton("Register");
         registerUserButton.addActionListener(new RegisterUserButtonListener());
@@ -63,16 +63,12 @@ public class RegistrationWindow extends JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 try {
-                    // Create a new user with the entered information
                     User newUser = new User(username, password);
-                    // Save the user in the database
                     UserService userService = new UserService();
                     userService.saveUser(newUser);
 
-                    // Display a success message
                     JOptionPane.showMessageDialog(RegistrationWindow.this, "User registered successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Close the registration window
                     dispose();
                 } catch (SQLException ex) {
                     ex.printStackTrace();

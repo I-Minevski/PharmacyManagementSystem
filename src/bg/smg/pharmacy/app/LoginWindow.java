@@ -60,7 +60,7 @@ public class LoginWindow extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2; // Make the "Forgot Password" button span two columns
+        gbc.gridwidth = 2;
         mainPanel.add(forgotPasswordButton, gbc);
 
         add(mainPanel);
@@ -79,16 +79,12 @@ public class LoginWindow extends JFrame {
                 JOptionPane.showMessageDialog(LoginWindow.this, "All fields must be filled", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 try {
-                    // Create a user object with entered credentials
                     User loginUser = new User(username, password);
-                    // Authenticate the user using the UserService
                     UserService userService = new UserService();
                     if (userService.verifyUser(loginUser)) {
-                        // Successful login
                         openStorageManagementWindow(username);
                         dispose();
                     } else {
-                        // Failed login
                         JOptionPane.showMessageDialog(LoginWindow.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (SQLException ex) {
@@ -100,7 +96,6 @@ public class LoginWindow extends JFrame {
     }
 
     private void openStorageManagementWindow(String username) {
-        // Implement logic to open the main storage management window here
         JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nStorage Management Window will be displayed.");
     }
 

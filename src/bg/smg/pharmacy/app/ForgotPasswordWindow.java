@@ -50,7 +50,7 @@ public class ForgotPasswordWindow extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2; // Make the button span two columns
+        gbc.gridwidth = 2;
         mainPanel.add(resetPasswordButton, gbc);
 
         add(mainPanel);
@@ -78,21 +78,15 @@ public class ForgotPasswordWindow extends JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 try {
-                    // Create a new user with the entered information
                     User userToUpdate = new User(username, newPassword);
-                    // Check if the username exists in the database
                     UserService userService = new UserService();
                     User existingUser = userService.getUserByUsername(username);
 
                     if (existingUser != null) {
-                        // Update the password in the database using the UserService
                         userService.updateUserPassword(userToUpdate);
-                        // Display a success message
                         JOptionPane.showMessageDialog(ForgotPasswordWindow.this, "Password reset successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        // Close the forgot password window
                         dispose();
                     } else {
-                        // User not found in the database
                         JOptionPane.showMessageDialog(ForgotPasswordWindow.this, "Username not found", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (SQLException ex) {
