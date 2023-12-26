@@ -4,10 +4,7 @@ import bg.smg.pharmacy.model.User;
 import bg.smg.pharmacy.util.DBManager;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Base64;
 
 public class UserService implements UserServiceI {
@@ -19,7 +16,59 @@ public class UserService implements UserServiceI {
     }
     @Override
     public void saveUser(User user) {
+        try {
+            this.connection = dataSource.getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO users (username, password, created, is_active) VALUES (?, ?, ?, ?)")) {
 
+                // Set parameters for the prepared statement
+                statement.setString(1, user.getUsername());
+                statement.setString(2, encode(user.getPassword())); // Hash the password
+                statement.setTimestamp(3, new Timestamp(System.currentTimeMillis())); // Set current timestamp
+                statement.setBoolean(4, true); // Default to active status
+
+                // Execute the SQL statement to insert the user
+                statement.executeUpdate();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (connection != null) {
+                System.out.println("Closing database connection...");
+                try {
+                    connection.close();
+                    System.out.println("Connection valid: " + connection.isValid(5));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void updateUserPassword(User user) {
+        try {
+            this.connection = dataSource.getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE users SET password=? WHERE username=?")) {
+
+                // Set parameters for the prepared statement
+                statement.setString(1, encode(user.getPassword()));
+                statement.setString(2, user.getUsername());
+
+                // Execute the SQL statement to update the user password
+                statement.executeUpdate();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

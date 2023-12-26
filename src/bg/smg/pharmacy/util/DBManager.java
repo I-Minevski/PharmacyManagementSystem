@@ -34,7 +34,7 @@ public class DBManager {
          * MariaDbPoolDataSource dataSource = new MariaDbPoolDataSource();
          * That should work!
          */
-        dataSource.setUrl("jdbc:mariadb://localhost:3306/bank_ms");
+        dataSource.setUrl("jdbc:mariadb://localhost:3306/pharmacy_ms");
         dataSource.setUser("root");
         dataSource.setPassword(null);
         this.dataSource = dataSource;

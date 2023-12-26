@@ -1,0 +1,113 @@
+package bg.smg.pharmacy.app;
+
+import bg.smg.pharmacy.model.User;
+import bg.smg.pharmacy.services.UserService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
+public class LoginWindow extends JFrame {
+
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+
+    public LoginWindow() {
+        setTitle("Pharmacy Management System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        usernameField = new JTextField(15);
+        passwordField = new JPasswordField(15);
+        JButton loginButton = new JButton("Login");
+
+        loginButton.addActionListener(new LoginButtonListener());
+
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(e -> new RegistrationWindow());
+
+        JButton forgotPasswordButton = new JButton("Forgot Password");
+        forgotPasswordButton.addActionListener(e -> new ForgotPasswordWindow());
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        mainPanel.add(new JLabel("Username:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        mainPanel.add(usernameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        mainPanel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        mainPanel.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        mainPanel.add(loginButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        mainPanel.add(registerButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2; // Make the "Forgot Password" button span two columns
+        mainPanel.add(forgotPasswordButton, gbc);
+
+        add(mainPanel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private class LoginButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(LoginWindow.this, "All fields must be filled", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    // Create a user object with entered credentials
+                    User loginUser = new User(username, password);
+                    // Authenticate the user using the UserService
+                    UserService userService = new UserService();
+                    if (userService.verifyUser(loginUser)) {
+                        // Successful login
+                        openStorageManagementWindow(username);
+                        dispose();
+                    } else {
+                        // Failed login
+                        JOptionPane.showMessageDialog(LoginWindow.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(LoginWindow.this, "Error during login", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void openStorageManagementWindow(String username) {
+        // Implement logic to open the main storage management window here
+        JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nStorage Management Window will be displayed.");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new LoginWindow();
+        });
+    }
+}
+
