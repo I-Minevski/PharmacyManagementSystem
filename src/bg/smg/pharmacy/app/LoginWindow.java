@@ -98,11 +98,5 @@ public class LoginWindow extends JFrame {
     private void openStorageManagementWindow(String username) {
         JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nStorage Management Window will be displayed.");
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new LoginWindow();
-        });
-    }
 }
 

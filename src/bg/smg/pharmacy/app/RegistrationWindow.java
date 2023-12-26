@@ -41,6 +41,7 @@ public class RegistrationWindow extends JFrame {
         add(registrationPanel);
 
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
