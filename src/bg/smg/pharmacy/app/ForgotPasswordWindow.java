@@ -2,6 +2,7 @@ package bg.smg.pharmacy.app;
 
 import bg.smg.pharmacy.model.User;
 import bg.smg.pharmacy.services.UserService;
+import bg.smg.pharmacy.util.PasswordValidator;
 
 import javax.swing.*;
 import java.awt.*;

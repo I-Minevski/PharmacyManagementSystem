@@ -2,6 +2,7 @@ package bg.smg.pharmacy.app;
 
 import bg.smg.pharmacy.model.User;
 import bg.smg.pharmacy.services.UserService;
+import bg.smg.pharmacy.util.PasswordValidator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,23 +21,43 @@ public class RegistrationWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel registrationPanel = new JPanel();
-        registrationPanel.setLayout(new GridLayout(5, 2));
+        registrationPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
         usernameField = new JTextField(15);
         passwordField = new JPasswordField(15);
         repeatPasswordField = new JPasswordField(15);
 
-        registrationPanel.add(new JLabel("New Username:"));
-        registrationPanel.add(usernameField);
-        registrationPanel.add(new JLabel("New Password:"));
-        registrationPanel.add(passwordField);
-        registrationPanel.add(new JLabel("Repeat Password:"));
-        registrationPanel.add(repeatPasswordField);
-        registrationPanel.add(new JPanel());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        registrationPanel.add(new JLabel("New Username:"), gbc);
 
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        registrationPanel.add(usernameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        registrationPanel.add(new JLabel("New Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        registrationPanel.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        registrationPanel.add(new JLabel("Repeat Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        registrationPanel.add(repeatPasswordField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
         JButton registerUserButton = new JButton("Register");
         registerUserButton.addActionListener(new RegisterUserButtonListener());
-
-        registrationPanel.add(registerUserButton);
+        registrationPanel.add(registerUserButton, gbc);
 
         add(registrationPanel);
 

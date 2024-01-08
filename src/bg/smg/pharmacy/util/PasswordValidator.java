@@ -1,4 +1,4 @@
-package bg.smg.pharmacy.app;
+package bg.smg.pharmacy.util;
 
 public class PasswordValidator {
 
