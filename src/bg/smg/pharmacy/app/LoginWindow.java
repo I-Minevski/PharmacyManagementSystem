@@ -83,7 +83,6 @@ public class LoginWindow extends JFrame {
                     UserService userService = new UserService();
                     if (userService.verifyUser(loginUser)) {
                         openStorageManagementWindow(username);
-                        dispose();
                     } else {
                         JOptionPane.showMessageDialog(LoginWindow.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -96,7 +95,9 @@ public class LoginWindow extends JFrame {
     }
 
     private void openStorageManagementWindow(String username) {
-        JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nStorage Management Window will be displayed.");
+        JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nClick OK to open Storage Management Window.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+        new DrugListWindow();
+        dispose();
     }
-}
 
+}
