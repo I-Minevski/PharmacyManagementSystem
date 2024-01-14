@@ -1,6 +1,7 @@
 package bg.smg.pharmacy.services;
 
 import bg.smg.pharmacy.model.Drug;
+import bg.smg.pharmacy.model.Ingredient;
 import bg.smg.pharmacy.util.DBManager;
 
 import javax.sql.DataSource;
@@ -94,6 +95,29 @@ public class DrugService implements DrugServiceI{
                 return 0;
             }
         }
+    }
+
+    public List<Ingredient> getIngredientsForDrug(int drugId) throws SQLException {
+        List<Ingredient> ingredientInfoList = new ArrayList<>();
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT i.name AS ingredient_name, di.ingredient_weight " +
+                             "FROM drug_ingredient di " +
+                             "JOIN ingredient i ON di.ingredient_id = i.ingredient_id " +
+                             "WHERE di.drug_id = ?")) {
+
+            statement.setInt(1, drugId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String ingredientName = resultSet.getString("ingredient_name");
+                int ingredientWeight = resultSet.getInt("ingredient_weight");
+                ingredientInfoList.add(new Ingredient(ingredientName, ingredientWeight));
+            }
+        }
+
+        return ingredientInfoList;
     }
 }
 

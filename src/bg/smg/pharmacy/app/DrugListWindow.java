@@ -1,5 +1,6 @@
 package bg.smg.pharmacy.app;
 import bg.smg.pharmacy.model.Drug;
+import bg.smg.pharmacy.model.Ingredient;
 import bg.smg.pharmacy.services.DrugService;
 
 import javax.swing.*;
@@ -80,7 +81,9 @@ public class DrugListWindow extends JFrame {
                 drugs = drugService.getAllDrugs();
                 Drug selectedDrug = drugs.get(selectedIndex);
 
-                new DrugDetailsWindow(selectedDrug);
+                List<Ingredient> ingredientInfoList = drugService.getIngredientsForDrug(selectedDrug.getDrugId());
+
+                new DrugDetailsWindow(selectedDrug, ingredientInfoList);
             } catch (SQLException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error fetching drug details from the database", "Error", JOptionPane.ERROR_MESSAGE);
