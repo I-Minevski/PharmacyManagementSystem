@@ -94,7 +94,7 @@ public class LoginWindow extends JFrame {
         }
     }
 
-    private void openStorageManagementWindow(String username) {
+    private void openStorageManagementWindow(String username) throws SQLException {
         JOptionPane.showMessageDialog(null, "Welcome, " + username + "!\nClick OK to open Storage Management Window.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
         new DrugListWindow();
         dispose();

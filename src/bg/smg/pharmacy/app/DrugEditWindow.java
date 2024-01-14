@@ -54,10 +54,8 @@ public class DrugEditWindow extends JFrame {
         mainPanel.add(updateButton);
 
         try {
-            // Fetch drug details from the database
             Drug drug = drugService.getDrugById(drugId);
 
-            // Set initial values in the fields
             nameField.setText(drug.getName());
             priceField.setText(String.valueOf(drug.getPrice()));
             descriptionArea.setText(drug.getDescription());
@@ -80,14 +78,12 @@ public class DrugEditWindow extends JFrame {
     private class UpdateButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Get updated values from the fields
             String name = nameField.getText();
             double price = Double.parseDouble(priceField.getText());
             String description = descriptionArea.getText();
             boolean prescriptionRequired = prescriptionCheckBox.isSelected();
             String standardDosage = dosageField.getText();
 
-            // Create a Drug object with updated values
             Drug updatedDrug = new Drug();
             updatedDrug.setDrugId(drugId);
             updatedDrug.setName(name);
@@ -97,7 +93,6 @@ public class DrugEditWindow extends JFrame {
             updatedDrug.setStandardDosage(standardDosage);
 
             try {
-                // Update the drug in the database
                 drugService.updateDrug(updatedDrug);
                 JOptionPane.showMessageDialog(DrugEditWindow.this, "Drug updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();

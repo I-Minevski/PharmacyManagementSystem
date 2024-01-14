@@ -4,10 +4,7 @@ import bg.smg.pharmacy.services.DrugService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DrugListWindow extends JFrame {
@@ -19,7 +16,7 @@ public class DrugListWindow extends JFrame {
     private JButton deleteButton;
     private DrugService drugService;
 
-    public DrugListWindow() {
+    public DrugListWindow() throws SQLException {
         try {
             drugService = new DrugService();
         } catch (SQLException e) {
@@ -46,11 +43,12 @@ public class DrugListWindow extends JFrame {
 
         drugListModel = new DefaultListModel<>();
         for (Drug drug : drugs) {
-            drugListModel.addElement(drug.getName() + " - $" + drug.getPrice());
+            int stockQuantity = drugService.getStockQuantity(drug.getDrugId());
+
+            drugListModel.addElement(drug.getName() + " - $" + drug.getPrice() + " - Stock: " + stockQuantity);
         }
         drugList = new JList<>(drugListModel);
 
-        // Create buttons
         detailsButton = new JButton("Details");
         editButton = new JButton("Edit");
         deleteButton = new JButton("Delete");
@@ -59,13 +57,11 @@ public class DrugListWindow extends JFrame {
         editButton.addActionListener(e -> editDrug());
         deleteButton.addActionListener(e -> deleteDrug());
 
-        // Create button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(detailsButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
 
-        // Add components to main panel
         mainPanel.add(new JScrollPane(drugList), BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -84,7 +80,6 @@ public class DrugListWindow extends JFrame {
                 drugs = drugService.getAllDrugs();
                 Drug selectedDrug = drugs.get(selectedIndex);
 
-                // Create and show the DrugDetailsWindow
                 new DrugDetailsWindow(selectedDrug);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -103,7 +98,6 @@ public class DrugListWindow extends JFrame {
                 drugs = drugService.getAllDrugs();
                 Drug selectedDrug = drugs.get(selectedIndex);
 
-                // Create and show the DrugEditWindow with the drugService instance
                 new DrugEditWindow(selectedDrug.getDrugId(), drugService);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -122,10 +116,8 @@ public class DrugListWindow extends JFrame {
                 drugs = drugService.getAllDrugs();
                 Drug selectedDrug = drugs.get(selectedIndex);
 
-                // Perform soft delete
                 drugService.deleteDrug(selectedDrug.getDrugId());
 
-                // Update the drug list
                 updateDrugList();
 
                 JOptionPane.showMessageDialog(this, "Drug deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -142,8 +134,11 @@ public class DrugListWindow extends JFrame {
         List<Drug> updatedDrugs;
         try {
             updatedDrugs = drugService.getAllDrugs();
+
             for (Drug drug : updatedDrugs) {
-                drugListModel.addElement(drug.getName() + " - $" + drug.getPrice());
+                int stockQuantity = drugService.getStockQuantity(drug.getDrugId());
+
+                drugListModel.addElement(drug.getName() + " - $" + drug.getPrice() + " - Stock: " + stockQuantity);
             }
         } catch (SQLException e) {
             e.printStackTrace();

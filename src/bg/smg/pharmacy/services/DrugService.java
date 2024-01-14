@@ -80,5 +80,20 @@ public class DrugService implements DrugServiceI{
             preparedStatement.executeUpdate();
         }
     }
+
+    public int getStockQuantity(int drugId) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT quantity FROM stock WHERE drug_id = ?")) {
+
+            statement.setInt(1, drugId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("quantity");
+            } else {
+                return 0;
+            }
+        }
+    }
 }
 
