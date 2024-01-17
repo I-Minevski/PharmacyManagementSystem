@@ -7,6 +7,7 @@ public class Drug {
     private Boolean prescriptionRequired;
     private String standardDosage;
     private Boolean isDeleted;
+    private String imageFilename;
 
     public Drug (){
     }
@@ -73,5 +74,13 @@ public class Drug {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getImageFilename() {
+        return imageFilename;
+    }
+
+    public void setImageFilename(String imageFilename) {
+        this.imageFilename = imageFilename;
     }
 }
