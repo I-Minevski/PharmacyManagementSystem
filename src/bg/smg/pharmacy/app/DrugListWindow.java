@@ -1,7 +1,6 @@
 package bg.smg.pharmacy.app;
 import bg.smg.pharmacy.model.Drug;
 import bg.smg.pharmacy.model.Ingredient;
-import bg.smg.pharmacy.services.DrugImageService;
 import bg.smg.pharmacy.services.DrugService;
 
 import javax.swing.*;
@@ -17,12 +16,10 @@ public class DrugListWindow extends JFrame {
     private JButton editButton;
     private JButton deleteButton;
     private DrugService drugService;
-    private DrugImageService drugImageService;
 
     public DrugListWindow() throws SQLException {
         try {
             drugService = new DrugService();
-            drugImageService = new DrugImageService();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error connecting to the database", "Error", JOptionPane.ERROR_MESSAGE);

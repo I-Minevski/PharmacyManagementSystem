@@ -34,7 +34,7 @@ public class DrugDetailsWindow extends JFrame {
         for (Ingredient ingredientInfo : ingredientInfoList) {
             mainPanel.add(new JLabel(ingredientInfo.getIngredientName()));
             mainPanel.add(new JLabel("  Amount:"));
-            mainPanel.add(new JLabel("" + ingredientInfo.getIngredientWeight()));
+            mainPanel.add(new JLabel("" + ingredientInfo.getIngredientWeight() + "mg"));
         }
 
         add(mainPanel);
