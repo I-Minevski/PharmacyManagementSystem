@@ -13,4 +13,5 @@ public interface DrugServiceI {
     public void deleteDrug(int drugId) throws SQLException;
     public int getStockQuantity(int drugId) throws SQLException;
     public List<Ingredient> getIngredientsForDrug(int drugId) throws SQLException;
+    public void addDrug(Drug drug) throws SQLException;
 }

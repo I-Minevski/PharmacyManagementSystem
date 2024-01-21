@@ -15,6 +15,7 @@ public class DrugListWindow extends JFrame {
     private JButton detailsButton;
     private JButton editButton;
     private JButton deleteButton;
+    private JButton addDrugButton;
     private DrugService drugService;
 
     public DrugListWindow() throws SQLException {
@@ -53,15 +54,18 @@ public class DrugListWindow extends JFrame {
         detailsButton = new JButton("Details");
         editButton = new JButton("Edit");
         deleteButton = new JButton("Delete");
+        addDrugButton = new JButton("Add Drug");
 
         detailsButton.addActionListener(e -> showDrugDetails());
         editButton.addActionListener(e -> editDrug());
         deleteButton.addActionListener(e -> deleteDrug());
+        addDrugButton.addActionListener(e -> openAddDrugWindow());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(detailsButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(addDrugButton);
 
         mainPanel.add(new JScrollPane(drugList), BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -147,6 +151,10 @@ public class DrugListWindow extends JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error updating drug list", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void openAddDrugWindow() {
+        new AddDrugWindow(drugService);
     }
 }
 

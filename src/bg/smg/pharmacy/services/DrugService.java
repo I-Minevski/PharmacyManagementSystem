@@ -119,5 +119,21 @@ public class DrugService implements DrugServiceI{
 
         return ingredientInfoList;
     }
+
+    public void addDrug(Drug drug) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "INSERT INTO drug (name, price, description, prescription_required, standard_dosage) " +
+                             "VALUES (?, ?, ?, ?, ?)")) {
+
+            statement.setString(1, drug.getName());
+            statement.setDouble(2, drug.getPrice());
+            statement.setString(3, drug.getDescription());
+            statement.setBoolean(4, drug.isPrescriptionRequired());
+            statement.setString(5, drug.getStandardDosage());
+
+            statement.executeUpdate();
+        }
+    }
 }
 
