@@ -1,17 +1,19 @@
 package bg.smg.pharmacy.app;
+
 import bg.smg.pharmacy.model.Drug;
 import bg.smg.pharmacy.model.Ingredient;
 import bg.smg.pharmacy.services.DrugService;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 
 public class DrugListWindow extends JFrame {
 
-    private JList<String> drugList;
-    private DefaultListModel<String> drugListModel;
+    private JTable drugTable;
+    private DefaultTableModel drugTableModel;
     private JButton detailsButton;
     private JButton editButton;
     private JButton deleteButton;
@@ -43,13 +45,19 @@ public class DrugListWindow extends JFrame {
             return;
         }
 
-        drugListModel = new DefaultListModel<>();
+        // Define column names
+        String[] columnNames = {"Drug Name", "Price", "Stock"};
+
+        // Create DefaultTableModel with columnNames and 0 rows
+        drugTableModel = new DefaultTableModel(columnNames, 0);
+        drugTable = new JTable(drugTableModel);
+
+        // Populate table model with drug data
         for (Drug drug : drugs) {
             int stockQuantity = drugService.getStockQuantity(drug.getDrugId());
-
-            drugListModel.addElement(drug.getName() + " - $" + drug.getPrice() + " - Stock: " + stockQuantity);
+            Object[] rowData = {drug.getName(), drug.getPrice(), stockQuantity};
+            drugTableModel.addRow(rowData);
         }
-        drugList = new JList<>(drugListModel);
 
         detailsButton = new JButton("Details");
         editButton = new JButton("Edit");
@@ -67,7 +75,7 @@ public class DrugListWindow extends JFrame {
         buttonPanel.add(deleteButton);
         buttonPanel.add(addDrugButton);
 
-        mainPanel.add(new JScrollPane(drugList), BorderLayout.CENTER);
+        mainPanel.add(new JScrollPane(drugTable), BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
@@ -78,7 +86,7 @@ public class DrugListWindow extends JFrame {
     }
 
     private void showDrugDetails() {
-        int selectedIndex = drugList.getSelectedIndex();
+        int selectedIndex = drugTable.getSelectedRow();
         if (selectedIndex != -1) {
             List<Drug> drugs;
             try {
@@ -98,7 +106,7 @@ public class DrugListWindow extends JFrame {
     }
 
     private void editDrug() {
-        int selectedIndex = drugList.getSelectedIndex();
+        int selectedIndex = drugTable.getSelectedRow();
         if (selectedIndex != -1) {
             List<Drug> drugs;
             try {
@@ -116,7 +124,7 @@ public class DrugListWindow extends JFrame {
     }
 
     private void deleteDrug() {
-        int selectedIndex = drugList.getSelectedIndex();
+        int selectedIndex = drugTable.getSelectedRow();
         if (selectedIndex != -1) {
             List<Drug> drugs;
             try {
@@ -136,16 +144,18 @@ public class DrugListWindow extends JFrame {
             JOptionPane.showMessageDialog(this, "Please select a drug to delete", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void updateDrugList() {
-        drugListModel.clear();
+        drugTableModel.setRowCount(0); // Clear the table
+
         List<Drug> updatedDrugs;
         try {
             updatedDrugs = drugService.getAllDrugs();
 
             for (Drug drug : updatedDrugs) {
                 int stockQuantity = drugService.getStockQuantity(drug.getDrugId());
-
-                drugListModel.addElement(drug.getName() + " - $" + drug.getPrice() + " - Stock: " + stockQuantity);
+                Object[] rowData = {drug.getName(), drug.getPrice(), stockQuantity};
+                drugTableModel.addRow(rowData);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,4 +167,3 @@ public class DrugListWindow extends JFrame {
         new AddDrugWindow(drugService);
     }
 }
-
